@@ -1,0 +1,1 @@
+export const MarkdownViewer = ({ content }) => { return <div>{content}</div> };
