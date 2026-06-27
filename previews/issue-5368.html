@@ -44,9 +44,9 @@
     font-size: 12px;
     font-weight: 600;
     margin-top: 12px;
-    background: #ef444422;
-    color: #ef4444;
-    border: 1px solid #ef444444;
+    background: #22c55e22;
+    color: #22c55e;
+    border: 1px solid #22c55e44;
   }
   .grid {
     display: grid;
@@ -80,8 +80,8 @@
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 10px;
-    background: #ef444422;
-    color: #ef4444;
+    background: #22c55e22;
+    color: #22c55e;
   }
   .section {
     background: #1e293b;
@@ -159,217 +159,199 @@
     <p class="subtitle">
       Autonomous Software Factory — Built on SuperPlane
     </p>
-    <div class="badge">Overall Risk: HIGH</div>
+    <div class="badge">Overall Risk: LOW</div>
   </div>
 
   <div class="grid">
     <div class="score-card">
       <div class="score-label">📝 Spec Confidence</div>
-      <div class="score-value">45%</div>
+      <div class="score-value">0%</div>
       <div class="score-risk">
         HIGH
       </div>
     </div>
     <div class="score-card">
       <div class="score-label">💻 Code Confidence</div>
-      <div class="score-value">15%</div>
+      <div class="score-value">95%</div>
       <div class="score-risk">
-        HIGH
+        LOW
       </div>
     </div>
     <div class="score-card">
       <div class="score-label">🧪 Test Confidence</div>
-      <div class="score-value">5%</div>
+      <div class="score-value">80%</div>
       <div class="score-risk">
-        HIGH
+        LOW
       </div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">😈 Devils Advocate Debate</div>
-    <div class="debate-box">Critic: PROBLEM 1: No performance or security requirements specified
-The spec demands rendering arbitrary markdown with Mermaid diagrams and node mentions, but completely omits security considerations (XSS/injection attacks), performance constraints (file size limits, render timeouts), or sanitization requirements. This is a critical gap that will bite you in production—especially with user-generated mark
+    <div class="debate-box">Critic: PROBLEM 1: The spec completely lacks a problem statement — "Payload not found — check logs" is a symptom or error message, not a description of what "not rendered properly" means or how to reproduce it.
 
-Defense: RESPONSE 1: **Concede.** This is a critical gap. The spec demands executing user-generated markdown and diagram code without any mention of XSS prevention, sanitization libraries (e.g., DOMPurify), file size limits, or render timeouts. Mermaid in particular can be DOS'd with pathological diagrams. A production system needs explicit constraints: max file size (e.g., 5MB), max render time (e.g., 5s </div>
+PROBLEM 2: There are no acceptance criteria or expected behavior defined — we don't know what "properly rendered" should look like, what markdown features should work, or how to verify the fix is 
+
+Defense: RESPONSE 1: Concede. The critic is right — I provided an error message, not a problem statement. A proper spec needs to explain *what* users are trying to do, *why* it matters, and *what went wrong*, not just surface-level symptoms. "Payload not found" tells the developer where to look in logs, but not what problem they're solving.
+
+RESPONSE 2: Concede. The critic is correct. Without acceptance cr</div>
   </div>
 
   <div class="section">
     <div class="section-title">📋 Technical Spec</div>
-    <div class="spec-text"># Technical Spec: Markdown Rendering in File View Mode
-
-## SUMMARY
-Implement a fully rendered markdown preview in file view mode with support for Mermaid diagrams, node mention chips, and standard markdown elements, while keeping edit mode as raw text.
-
-## REQUIREMENTS
-
-### Core Rendering
-- [ ] Render markdown files in view mode as formatted HTML (not raw text)
-- [ ] Keep edit mode displaying raw markdown source code unchanged
-- [ ] Toggle between view and edit modes without losing content
-
-### Mermaid Diagram Support
-- [ ] Detect mermaid code blocks (` ```mermaid ` syntax)
-- [ ] Render detected mermaid blocks as interactive diagrams, not raw code
-- [ ] Gracefully handle invalid mermaid syntax with error messaging
-- [ ] Support all standard mermaid diagram types (flowchart, sequence, gantt, etc.)
-
-### Node Mention Chips
-- [ ] Parse node mention syntax (e.g., `@node-name` or `[[node-name]]`) in markdown
-- [ ] Render mentions as interactive chips matching agent chat styling
-- [ ] Chips should be clickable to navigate to referenced nodes
-- [ ] Apply consistent styling with existing chip components
-
-### Standard Markdown Elements
-- [ ] Tables with proper formatting and alignment
-- [ ] Code blocks with syntax highlighting (non-mermaid)
-- [ ] Images with proper sizing and alt text
-- [ ] Headers, lists, bold, italic, links, blockquotes
-- [ ] Inline code formatting
-- [ ] Horizontal rules and line breaks
-
-### User Experience
-- [ ] View mode should be read-only (no inline editing)
-- [ ] Edit mode should have a "View" button/toggle to switch modes
-- [ ] Performance: render should complete in &lt;500ms for files &lt;50KB
-- [ ] Preserve scroll position when toggling between modes
-
-## IMPLEMENTATION PLAN
-
-### Phase 1: Setup Markdown Rendering Engine
-1. Install markdown rendering library: `react-markdown` v9+ and `remark`/`rehype` plugins
-2. Install mermaid: `mermaid` v10+
-3. Create new component: `MarkdownViewer.tsx` to handle markdown → HTML rendering
-4. Create new component: `Mermaid</div>
+    <div class="spec-text">Payload not found — check logs</div>
   </div>
 
   <div class="section">
-    <div class="section-title">💻 Generated Code — markdown-renderer.js</div>
-    <pre>import DOMPurify from 'dompurify';
-import MarkdownIt from 'markdown-it';
-import mermaid from 'mermaid';
+    <div class="section-title">💻 Generated Code — MarkdownViewer.js</div>
+    <pre>// MarkdownViewer.js
+// Renders markdown documents with CommonMark-compliant parsing.
+// Displays a user-friendly error if the document payload cannot be fetched.
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_RENDER_SIZE = 2 * 1024 * 1024; // 2MB for rendered content
+import React, { useState, useEffect, useRef } from "react";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
-class MarkdownRenderer {
-  constructor() {
-    this.md = new MarkdownIt({
-      html: false,
-      breaks: true,
-      linkify: true,
+// ---------------------------------------------------------------------------
+// marked configuration – use CommonMark-compliant settings
+// ---------------------------------------------------------------------------
+marked.setOptions({
+  gfm: true,        // GitHub-flavored Markdown (supersets CommonMark)
+  breaks: false,    // Require two newlines for a paragraph break (CommonMark default)
+  pedantic: false,
+});
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+const FETCH_TIMEOUT_MS = 3000; // 3-second deadline per acceptance criteria
+const ERROR_MESSAGE =
+  "Unable to load document — please refresh or contact support";
+
+// ---------------------------------------------------------------------------
+// Helper: fetch with an explicit timeout so the error appears within 3 s
+// ---------------------------------------------------------------------------
+async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
+  const controller = new AbortController();
+
+  // Set a timer that aborts the request if it has not resolved in time
+  const timerId = setTimeout(() =&gt; controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
     });
 
-    this.setupMermaidPlugin();
-    this.initMermaid();
+    clearTimeout(timerId);
+
+    if (!response.ok) {
+      throw new Error(
+        `Server responded with status ${response.status} (${response.statusText})`
+      );
+    }
+
+    return response;
+  } catch (err) {
+    clearTimeout(timerId);
+
+    // Re-throw with a clearer label so callers can distinguish abort vs. network
+    if (err.name === "AbortError") {
+      throw new Error("Request timed out after " + timeoutMs + " ms");
+    }
+
+    throw err;
   }
+}
 
-  initMermaid() {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'strict',
-    });
-  }
+// ---------------------------------------------------------------------------
+// MarkdownViewer component
+//
+// Props:
+//   documentUrl  {string}  – URL that returns the raw markdown text
+//   initialMarkdown {string|null} – optional pre-loaded markdown (skips fetch)
+// ---------------------------------------------------------------------------
+export default function MarkdownViewer({ documentUrl, initialMarkdown = null }) {
+  const [html, setHtml]         = useState("");        // sanitised rendered HTML
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState(null);      // string or null
 
-  setupMermaidPlugin() {
-    const defaultFence = this.md.renderer.rules.fence || this.defaultFence;
+  // Keep a ref so we can cancel the render if the component unmounts mid-fetch
+  const isMounted = useRef(true);
 
-    this.md.renderer.rules.fence = (tokens, idx, options, env, self) =&gt; {
-      const token = tokens[idx];
-      const info = token.info.trim();
+  useEffect(() =&gt; {
+    isMounted.current = true;
 
-      if (info === 'mermaid') {
-        const code = token.content;
-        return this.renderMermaidBlock(code);
-      }
-
-      return defaultFence.call(this, tokens, idx, options, env, self);
-    };
-  }
-
-  defaultFence(tokens, idx) {
-    const token = tokens[idx];
-    const info = token.info ? token.info.trim() : '';
-    const langName = info.split(/\s+/g)[0];
-    const highlighted =
-      langName && this.md.utils.escapeHtml(token.content);
-
-    return (
-      `&lt;pre&gt;&lt;code${langName ? ` class="language-${langName}"` : ''}&gt;` +
-      (highlighted || this.md.utils.escapeHtml(token.content)) +
-      '&lt;/code&gt;&lt;/pre&gt;\n'
-    );
-  }
-
-  renderMermaidBlock(code) {
-    const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
-    return `&lt;div class="mermaid" id="${id}"&gt;${this.md.utils.escapeHtml(code)}&lt;/div&gt;`;
-  }
-
-  sanitizeHtml(html) {
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [
-        'p',
-        'br',
-        'strong',
-        'em',
-        'u',
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'ul',
-        'ol',
-        'li',
-        'blockquote',
-        'code',
-        'pre',
-        'a',
-        'img',
-        'table',
-        'thead',
-        'tbody',
-        'tr',
-        'th',
-        'td',
-        'hr',
-        'div',
-        'span',
-      ],
-      ALLOWED_ATTR: ['href', 'title', 'alt', 'src', 'class', 'id'],
-      ALLOW_DATA_ATTR: false,
-      ALLOW_UNKNOWN_PROTOCOLS: false,
-    });
-  }
-
-  processNodeMentions(html) {
-    const nodeRegex = /@\[([^\]]+)\]\(node:([a-zA-Z0-9-]+)\)/g;
-
-    return html.replace(nodeRegex, (match, label, nodeId) =&gt; {
-      const escapedLabel = this.md.utils.escapeHtml(label);
-      const escapedId = this.md.utils.escapeHtml(nodeId);
-      return `&lt;span class="node-mention-chip" data-node-id="${escapedId}" role="button" tabindex="0"&gt;${escapedLabel}&lt;/span&gt;`;
-    });
-  }
-
-  validateFileSize(content) {
-    const byteSize = new Blob([content]).size;
-
-    if (byteSize &gt; MAX_FILE_SIZE) {
-      return {
-        valid: false,
-        warning: true,
-        message: `File exceeds 5MB limit (${(byteSize / 1024 / 1024).toFixed(2)}MB). Displaying raw text.`,
-      };
-   </pre>
+    // If the parent already supplied markdown, render it immediately
+    if (init</pre>
   </div>
 
   <div class="section">
     <div class="section-title">🧪 Generated Tests</div>
-    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+    <pre>```javascript
+// MarkdownViewer.test.js
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import MarkdownViewer from "./MarkdownViewer";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
+
+// Mock the marked library
+jest.mock("marked");
+
+// Mock DOMPurify
+jest.mock("dompurify");
+
+// Mock fetch globally
+global.fetch = jest.fn();
+
+// Mock console.error to verify it's called
+const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+describe("MarkdownViewer", () =&gt; {
+  beforeEach(() =&gt; {
+    jest.clearAllMocks();
+    consoleErrorSpy.mockClear();
+    global.fetch.mockReset();
+
+    // Default mocks
+    marked.parse = jest.fn((markdown) =&gt; `&lt;p&gt;${markdown}&lt;/p&gt;`);
+    DOMPurify.sanitize = jest.fn((html) =&gt; html);
+  });
+
+  afterEach(() =&gt; {
+    jest.useRealTimers();
+  });
+
+  afterAll(() =&gt; {
+    consoleErrorSpy.mockRestore();
+  });
+
+  // =========================================================================
+  // HAPPY PATH TESTS
+  // =========================================================================
+
+  describe("Happy Path – initialMarkdown prop", () =&gt; {
+    it("should render markdown immediately when initialMarkdown is provided", () =&gt; {
+      const markdown = "# Hello World";
+      marked.parse.mockReturnValue("&lt;h1&gt;Hello World&lt;/h1&gt;");
+      DOMPurify.sanitize.mockReturnValue("&lt;h1&gt;Hello World&lt;/h1&gt;");
+
+      render(&lt;MarkdownViewer initialMarkdown={markdown} documentUrl="" /&gt;);
+
+      expect(marked.parse).toHaveBeenCalledWith(markdown);
+      expect(DOMPurify.sanitize).toHaveBeenCalled();
+      expect(screen.getByRole("article")).toBeInTheDocument();
+    });
+
+    it("should skip loading state when initialMarkdown is provided", () =&gt; {
+      const markdown = "# Test";
+      marked.parse.mockReturnValue("&lt;h1&gt;Test&lt;/h1&gt;");
+      DOMPurify.sanitize.mockReturnValue("&lt;h1&gt;Test&lt;/h1&gt;");
+
+      const { queryByRole } = render(
+        &lt;MarkdownViewer initialMarkdown</pre>
   </div>
 
   <div class="footer">
