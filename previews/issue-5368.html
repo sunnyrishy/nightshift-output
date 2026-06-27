@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 NightShift — Issue #5368</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+  .logo {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #ef444422;
+    color: #ef4444;
+    border: 1px solid #ef444444;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .score-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #3b82f6;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-risk {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #ef444422;
+    color: #ef4444;
+  }
+  .section {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .debate-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #ef4444;
+  }
+  pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #94a3b8;
+    line-height: 1.6;
+    border-left: 3px solid #3b82f6;
+  }
+  .spec-text {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #22c55e;
+  }
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🌙</div>
+    <h1>NightShift — Issue #5368</h1>
+    <p class="subtitle">
+      Autonomous Software Factory — Built on SuperPlane
+    </p>
+    <div class="badge">Overall Risk: HIGH</div>
+  </div>
+
+  <div class="grid">
+    <div class="score-card">
+      <div class="score-label">📝 Spec Confidence</div>
+      <div class="score-value">45%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">💻 Code Confidence</div>
+      <div class="score-value">15%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">🧪 Test Confidence</div>
+      <div class="score-value">5%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">😈 Devils Advocate Debate</div>
+    <div class="debate-box">Critic: PROBLEM 1: Incomplete and Ambiguous Requirements
+The spec cuts off mid-sentence ("View mod") and leaves critical details undefined. What exactly is the "node mention syntax"—is it `@node-name` or `[[node-name]]`? The spec says "confirm current syntax" but doesn't confirm it. How should chips behave on click? What counts as a "render failure" for Mermaid? Without these decisions made, implementatio
+
+Defense: RESPONSE 1: **Concede.** The critic is right. The spec references "node mention chips" without defining the syntax, and says "confirm current syntax" instead of actually confirming it. I left click behavior undefined and "render failure" vague. These aren't minor polish issues—they're blocking decisions that will cause implementation rework. I should have resolved these before writing the spec.
+
+R</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Technical Spec</div>
+    <div class="spec-text"># Technical Spec: Markdown File View Mode Rendering
+
+## SUMMARY
+Implement a fully-rendered markdown preview mode for markdown files that supports Mermaid diagrams, node mention chips, and standard markdown elements, while keeping edit mode as raw text.
+
+---
+
+## REQUIREMENTS
+
+### Core Rendering
+- [ ] Render markdown files in view mode with a dedicated preview component
+- [ ] Support all standard markdown elements:
+  - Headings (H1-H6)
+  - Paragraphs and line breaks
+  - Bold, italic, strikethrough text
+  - Ordered and unordered lists
+  - Code blocks with syntax highlighting (maintain existing implementation)
+  - Inline code
+  - Blockquotes
+  - Horizontal rules
+  - Tables with proper formatting
+  - Links and images
+  - HTML passthrough (if applicable)
+
+### Mermaid Diagram Support
+- [ ] Detect Mermaid code blocks (` ```mermaid ` fences)
+- [ ] Render detected blocks as interactive Mermaid diagrams instead of raw code
+- [ ] Include fallback for diagram render failures (display error message)
+- [ ] Support all Mermaid diagram types (flowchart, sequence, gantt, pie, etc.)
+
+### Node Mention Chips
+- [ ] Detect node mention syntax (e.g., `@node-name` or `[[node-name]]` — confirm current syntax)
+- [ ] Render mentions using the same chip component from agent chat
+- [ ] Style chips consistently with existing design system
+- [ ] Ensure chip click behavior works (navigate to node or show preview)
+
+### Mode Switching
+- [ ] Add toggle/button to switch between View and Edit modes
+- [ ] View mode: read-only, fully rendered
+- [ ] Edit mode: raw markdown text, editable (existing behavior)
+- [ ] Persist user's mode preference (localStorage or state management)
+
+### Performance & Reliability
+- [ ] Lazy-load Mermaid library only when needed
+- [ ] Handle parsing errors gracefully (render fallback content)
+- [ ] Ensure view mode doesn't block file loading
+
+---
+
+## IMPLEMENTATION PLAN
+
+### Phase 1: Setup & Dependencies
+1. **Add markdown rendering library**
+   - Install `remark` + `react-markdo</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💻 Generated Code — MarkdownPreview.js</div>
+    <pre># Markdown File View Mode Rendering Implementation
+
+FILENAME: MarkdownPreview.js
+```javascript
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import DOMPurify from 'dompurify';
+import mermaid from 'mermaid';
+import marked from 'marked';
+import './MarkdownPreview.css';
+
+/**
+ * MarkdownPreview Component
+ * Renders markdown files with support for Mermaid diagrams and @node-id mentions
+ * Includes sanitization, timeout handling, and accessibility features
+ */
+const MarkdownPreview = ({ fileContent, onNodeMention, fileName }) =&gt; {
+  const [html, setHtml] = useState('');
+  const [mermaidErrors, setMermaidErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [renderTime, setRenderTime] = useState(0);
+  const containerRef = useRef(null);
+  const mermaidTimeoutsRef = useRef({});
+
+  // Configure mermaid with timeout
+  useEffect(() =&gt; {
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'antitrust',
+      theme: 'default',
+      logLevel: 'error'
+    });
+  }, []);
+
+  // Extract node IDs from content for mention detection
+  const extractNodeIds = useCallback((text) =&gt; {
+    const nodeIdRegex = /@([a-zA-Z0-9_-]+)/g;
+    const matches = [];
+    let match;
+    while ((match = nodeIdRegex.exec(text)) !== null) {
+      matches.push(match[1]);
+    }
+    return [...new Set(matches)];
+  }, []);
+
+  // Render markdown with custom renderer for mermaid and mentions
+  const renderMarkdown = useCallback(async () =&gt; {
+    const startTime = performance.now();
+    setIsLoading(true);
+
+    if (!fileContent || typeof fileContent !== 'string') {
+      setHtml('');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Custom renderer for handling code blocks
+      const renderer = new marked.Renderer();
+      const originalCodeRenderer = renderer.code.bind(renderer);
+
+      renderer.code = (code, language) =&gt; {
+        // Handle mermaid diagrams
+        if (language === 'mermaid') {
+          const diagramId = `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          return `&lt;div class="mermaid-wrapper"&gt;&lt;div id="${diagramId}" class="mermaid"&gt;${DOMPurify.sanitize(code)}&lt;/div&gt;&lt;/div&gt;`;
+        }
+        return originalCodeRenderer(code, language);
+      };
+
+      // Render markdown
+      let rawHtml = await marked(fileContent, { renderer });
+
+      // Process @node-id mentions
+      rawHtml = rawHtml.replace(
+        /@([a-zA-Z0-9_-]+)/g,
+        (match, nodeId) =&gt; {
+          return `&lt;span class="node-mention" data-node-id="${DOMPurify.sanitize(nodeId)}" role="button" tabindex="0"&gt;${match}&lt;/span&gt;`;
+        }
+      );
+
+      // Sanitize HTML
+      const sanitizedHtml = DOMPurify.sanitize(rawHtml, {
+        ALLOWED_TAGS: [
+          'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+          'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img',
+          'table', 'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span',
+          'hr', 'section', 'article'
+  </pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧪 Generated Tests</div>
+    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="pill">🌙 NightShift</span>
+      <span class="pill">⚡ SuperPlane</span>
+      <span class="pill">🚀 Render</span>
+      <span class="pill">🤖 Claude AI</span>
+    </div>
+    <p style="margin-top: 12px">
+      Generated automatically — zero human involvement
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
