@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 NightShift — Issue #5164</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+  .logo {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #ef444422;
+    color: #ef4444;
+    border: 1px solid #ef444444;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .score-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #3b82f6;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-risk {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #ef444422;
+    color: #ef4444;
+  }
+  .section {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .debate-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #ef4444;
+  }
+  pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #94a3b8;
+    line-height: 1.6;
+    border-left: 3px solid #3b82f6;
+  }
+  .spec-text {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #22c55e;
+  }
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🌙</div>
+    <h1>NightShift — Issue #5164</h1>
+    <p class="subtitle">
+      Autonomous Software Factory — Built on SuperPlane
+    </p>
+    <div class="badge">Overall Risk: HIGH</div>
+  </div>
+
+  <div class="grid">
+    <div class="score-card">
+      <div class="score-label">📝 Spec Confidence</div>
+      <div class="score-value">45%</div>
+      <div class="score-risk">
+        MEDIUM
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">💻 Code Confidence</div>
+      <div class="score-value">15%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">🧪 Test Confidence</div>
+      <div class="score-value">5%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">😈 Devils Advocate Debate</div>
+    <div class="debate-box">Critic: PROBLEM 1: Vague "sanitization" requirements with no concrete rules
+The spec says to sanitize input/output payloads and mask sensitive data, but provides zero guidance on what constitutes sensitive data, which fields to redact, or what happens when sanitization removes debugging-critical information. This will lead to either over-aggressive filtering (hiding needed context) or inconsistent impleme
+
+Defense: RESPONSE 1: **Concede.** The critic is right—"sanitized if needed" is a cop-out. I punted the hardest decision to implementation. Without explicit rules (e.g., "redact fields matching regex `password|token|secret|api_key`" or "use a product-defined whitelist per payload type"), teams will either strip too much (making debugging useless) or too little (creating security issues). I should have inclu</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Technical Spec</div>
+    <div class="spec-text"># Technical Spec: Send Execution to Agent Chat
+
+## SUMMARY
+Add a "Send to Agent" button on the execution detail view that pre-populates the agent chat with structured execution context (node name, status, payloads, errors) for streamlined debugging.
+
+## REQUIREMENTS
+
+**Functional Requirements**
+- Add a "Send to Agent" button/icon on the execution detail view (visible when viewing a failed or completed execution)
+- Clicking the button opens the agent chat interface (in a modal, sidebar, or new tab per existing UX pattern)
+- The agent chat is pre-populated with a structured message containing:
+  - Node name / workflow step identifier
+  - Execution status (failed, completed, etc.)
+  - Error message (if failed)
+  - Input payload (sanitized if needed)
+  - Output payload (sanitized if needed)
+  - Execution timestamp and duration
+  - Node configuration (if relevant to debugging)
+- The user can immediately type a follow-up prompt (e.g., "fix this", "why did this fail") without re-explaining context
+- The agent receives the full context and can reason about the execution data
+
+**Non-Functional Requirements**
+- Button placement should be prominent but not disruptive (near error summary or in action bar)
+- Message formatting to agent should be clear and machine-parseable
+- No data loss or UI lag when switching to agent chat
+- Works for all execution states (failed, succeeded, timed out, etc.)
+- Sensitive data (API keys, passwords) should be masked before sending to agent
+
+**UX Requirements**
+- Single-click action — no extra dialogs or confirmations needed
+- Button should be disabled gracefully if agent chat is unavailable
+- Clear visual feedback (loading state, success toast, or navigation indicator)
+
+## IMPLEMENTATION PLAN
+
+### Phase 1: Backend (Agent Context API)
+1. **Create endpoint** `POST /api/executions/{executionId}/send-to-agent`
+   - Accept execution ID
+   - Fetch execution record with full payload, node config, error details
+   - Sanitize sensitive fields (PII, crede</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💻 Generated Code — index.js</div>
+    <pre>import React, { useState } from 'react';
+
+// Constants
+const REDACTION_PATTERN = /password|token|secret|api_key|authorization|credit_card/i;
+const MAX_PAYLOAD_SIZE = 5 * 1024 * 1024; // 5MB
+const TRUNCATION_WARNING = 'Payload exceeded 5MB and was truncated';
+
+/**
+ * Sanitizes sensitive data from payloads
+ * @param {Object} data - Data to sanitize
+ * @param {Set} processedRefs - Track circular references
+ * @returns {Object} Sanitized copy of data
+ */
+function sanitizePayload(data, processedRefs = new WeakSet()) {
+  if (data === null || data === undefined) {
+    return data;
+  }
+
+  // Handle circular references
+  if (typeof data === 'object' && processedRefs.has(data)) {
+    return '[Circular Reference]';
+  }
+
+  if (typeof data === 'object') {
+    processedRefs.add(data);
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(item =&gt; sanitizePayload(item, processedRefs));
+  }
+
+  if (typeof data === 'object') {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (REDACTION_PATTERN.test(key)) {
+        sanitized[key] = '[REDACTED]';
+      } else if (typeof value === 'object') {
+        sanitized[key] = sanitizePayload(value, processedRefs);
+      } else if (typeof value === 'string' && REDACTION_PATTERN.test(key)) {
+        sanitized[key] = '[REDACTED]';
+      } else {
+        sanitized[key] = value;
+      }
+    }
+    return sanitized;
+  }
+
+  return data;
+}
+
+/**
+ * Serializes execution context to ExecutionContextMessage schema
+ * @param {Object} execution - Execution object with id, status, input, output, error, timestamps
+ * @returns {Object} Serialized message or error object
+ */
+function serializeExecutionContext(execution) {
+  try {
+    if (!execution || typeof execution !== 'object') {
+      throw new Error('Invalid execution object');
+    }
+
+    const sanitizedInput = sanitizePayload(execution.input);
+    const sanitizedOutput = sanitizePayload(execution.output);
+
+    let isTruncated = false;
+    const inputJson = JSON.stringify(sanitizedInput);
+    const outputJson = JSON.stringify(sanitizedOutput);
+
+    if (inputJson.length &gt; MAX_PAYLOAD_SIZE || outputJson.length &gt; MAX_PAYLOAD_SIZE) {
+      isTruncated = true;
+    }
+
+    const message = {
+      type: 'execution_context',
+      version: '1.0',
+      timestamp: new Date().toISOString(),
+      execution: {
+        id: execution.id,
+        status: execution.status,
+        input: sanitizedInput,
+        output: sanitizedOutput,
+        error: execution.error ? {
+          message: execution.error.message,
+          stack: execution.error.stack,
+          code: execution.error.code,
+        } : null,
+        startTime: execution.startTime,
+        endTime: execution.endTime,
+        duration: execution.duration,
+      },
+      metadata: {
+        sanitized: true,
+        truncated: isTruncated,
+        truncationWarning: isTruncated ? TRUNCATION_WARNING : null,
+      },
+    };
+
+    return { success: true, message };
+  } catch (error) {
+    return {
+      succ</pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧪 Generated Tests</div>
+    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="pill">🌙 NightShift</span>
+      <span class="pill">⚡ SuperPlane</span>
+      <span class="pill">🚀 Render</span>
+      <span class="pill">🤖 Claude AI</span>
+    </div>
+    <p style="margin-top: 12px">
+      Generated automatically — zero human involvement
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
