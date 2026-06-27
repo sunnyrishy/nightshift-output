@@ -1,4 +1,1 @@
-// Auto-generated tests
-test('component renders', () => {
-  expect(true).toBe(true);
-});
+test('renders', () => { expect(true).toBe(true); });
