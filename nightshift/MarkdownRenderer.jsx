@@ -1,117 +1,174 @@
-FILENAME: MarkdownRenderer.jsx
-```javascript
-import React, { useState, useEffect, useCallback } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import mermaid from 'mermaid';
+import React, { useEffect, useState, useCallback } from 'react';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+import { useNavigate } from 'react-router-dom';
+import NodeMentionChip from '@/components/chips/NodeMentionChip';
+import MermaidDiagram from '@/components/diagrams/MermaidDiagram';
 import './MarkdownRenderer.css';
 
-// Initialize Mermaid
-mermaid.initialize({ startOnLoad: true, theme: 'default', logLevel: 'error' });
+const MarkdownRenderer = ({ content, nodeDatabase = {} }) => {
+  const [renderedHTML, setRenderedHTML] = useState('');
+  const [mentions, setMentions] = useState({});
+  const navigate = useNavigate();
 
-/**
- * NodeMentionChip - Renders a mention chip for @node-name references
- */
-const NodeMentionChip = ({ nodeName, onNodeClick }) => {
-  const handleClick = useCallback(() => {
-    if (onNodeClick) {
-      onNodeClick(nodeName);
+  // Regex to match @node-identifier mentions
+  const MENTION_REGEX = /(?:^|\s)@([a-zA-Z0-9_-]+)/g;
+
+  /**
+   * Extract and validate node mentions from markdown
+   */
+  const extractMentions = useCallback((text) => {
+    const foundMentions = {};
+    let match;
+
+    while ((match = MENTION_REGEX.exec(text)) !== null) {
+      const nodeId = match[1];
+      foundMentions[nodeId] = {
+        exists: nodeId in nodeDatabase,
+        nodeId,
+      };
     }
-  }, [nodeName, onNodeClick]);
 
-  return (
-    <span
-      className="node-mention-chip"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleClick();
-        }
-      }}
-    >
-      @{nodeName}
-    </span>
-  );
-};
+    return foundMentions;
+  }, [nodeDatabase]);
 
-/**
- * MermaidDiagram - Renders Mermaid diagram with error handling and timeout
- */
-const MermaidDiagram = ({ content }) => {
-  const [diagram, setDiagram] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const elementId = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+  /**
+   * Custom renderer for marked to handle mermaid diagrams
+   */
+  const setupMarkedRenderer = () => {
+    const renderer = new marked.Renderer();
 
-  useEffect(() => {
-    const renderMermaid = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Create timeout promise
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Mermaid rendering timeout')), 5000)
-        );
-
-        // Validate mermaid syntax
-        await Promise.race([
-          mermaid.parse(content),
-          timeoutPromise,
-        ]);
-
-        // Render diagram
-        const { svg } = await Promise.race([
-          mermaid.render(elementId, content),
-          timeoutPromise,
-        ]);
-
-        setDiagram(svg);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message || 'Failed to render diagram');
-        setLoading(false);
-      }
+    // Override code block rendering for mermaid support
+    renderer.codespan = (code) => {
+      return `<code>${code.text}</code>`;
     };
 
-    renderMermaid();
-  }, [content, elementId]);
+    renderer.code = (code) => {
+      const { text, lang } = code;
 
-  if (loading) {
-    return <div className="mermaid-loading">Rendering diagram...</div>;
-  }
+      if (lang === 'mermaid') {
+        // Return placeholder for mermaid diagram
+        return `<div class="mermaid-container" data-mermaid="${btoa(text)}"></div>`;
+      }
 
-  if (error) {
-    return (
-      <div className="mermaid-error">
-        <strong>Diagram Error:</strong> {error}
-        <pre className="mermaid-fallback">{content}</pre>
-      </div>
+      // Standard code block with syntax highlighting
+      return `<pre><code class="language-${lang || 'plaintext'}">${DOMPurify.sanitize(text)}</code></pre>`;
+    };
+
+    // Custom table rendering with alignment support
+    renderer.table = (table) => {
+      return `<div class="markdown-table-wrapper"><table>${table.header}${table.body}</table></div>`;
+    };
+
+    renderer.tablerow = (row) => {
+      return `<tr>${row.text}</tr>`;
+    };
+
+    renderer.tablecell = (cell) => {
+      const { text, flags } = cell;
+      const align = flags.align ? ` style="text-align:${flags.align}"` : '';
+      const tag = flags.header ? 'th' : 'td';
+      return `<${tag}${align}>${text}</${tag}>`;
+    };
+
+    return renderer;
+  };
+
+  /**
+   * Replace mention placeholders with React components
+   */
+  const replaceMentionsWithComponents = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Find all text nodes and replace mentions
+    const walker = document.createTreeWalker(
+      doc.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
     );
-  }
 
-  return (
-    <div
-      className="mermaid-diagram"
-      dangerouslySetInnerHTML={{ __html: diagram }}
-    />
-  );
-};
+    const nodesToReplace = [];
+    let currentNode;
 
-/**
- * Custom renderers for markdown elements
- */
-const createCustomRenderers = (onNodeClick) => ({
-  code({ node, inline, className, children, ...props }) {
-    const match = /language-(\w+)/.exec(className || '');
-    const language = match ? match[1] : 'text';
-
-    if (inline) {
-      return <code className="inline-code">{children}</code>;
+    while ((currentNode = walker.nextNode())) {
+      if (MENTION_REGEX.test(currentNode.nodeValue)) {
+        nodesToReplace.push(currentNode);
+      }
     }
 
-    re
+    nodesToReplace.forEach((node) => {
+      const span = document.createElement('span');
+      span.innerHTML = node.nodeValue.replace(
+        MENTION_REGEX,
+        (match, nodeId) => {
+          const chipKey = `mention-${nodeId}`;
+          const exists = mentions[nodeId]?.exists ?? false;
+          return `<span data-mention-chip="${chipKey}" data-node-id="${nodeId}" data-exists="${exists}"></span>`;
+        }
+      );
+      node.parentNode.replaceChild(span, node);
+    });
+
+    return doc.body.innerHTML;
+  };
+
+  /**
+   * Render markdown to HTML with custom handlers
+   */
+  const renderMarkdown = useCallback(async () => {
+    if (!content) {
+      setRenderedHTML('');
+      return;
+    }
+
+    // Extract mentions for validation
+    const foundMentions = extractMentions(content);
+    setMentions(foundMentions);
+
+    try {
+      // Configure marked options
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+        pedantic: false,
+      });
+
+      // Render markdown
+      const renderer = setupMarkedRenderer();
+      const html = marked(content, { renderer });
+
+      // Sanitize HTML
+      const sanitized = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: [
+          'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+          'p', 'br', 'strong', 'em', 'u', 'del',
+          'ul', 'ol', 'li', 'blockquote',
+          'table', 'thead', 'tbody', 'tr', 'th', 'td',
+          'pre', 'code', 'a', 'img', 'hr',
+          'div', 'span', 'section', 'article',
+        ],
+        ALLOWED_ATTR: [
+          'href', 'title', 'target', 'rel',
+          'src', 'alt', 'width', 'height',
+          'class', 'id', 'style', 'data-*',
+        ],
+      });
+
+      setRenderedHTML(sanitized);
+    } catch (error) {
+      console.error('Markdown rendering error:', error);
+      setRenderedHTML(`<p>Error rendering markdown: ${error.message}</p>`);
+    }
+  }, [content, extractMentions]);
+
+  // Render markdown on content change
+  useEffect(() => {
+    renderMarkdown();
+  }, [renderMarkdown]);
+
+  /**
+   * Handle mention chip click navigation
+   */
+  const handleMentionCl
