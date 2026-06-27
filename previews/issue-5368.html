@@ -172,7 +172,7 @@
     </div>
     <div class="score-card">
       <div class="score-label">💻 Code Confidence</div>
-      <div class="score-value">25%</div>
+      <div class="score-value">15%</div>
       <div class="score-risk">
         HIGH
       </div>
@@ -188,164 +188,183 @@
 
   <div class="section">
     <div class="section-title">😈 Devils Advocate Debate</div>
-    <div class="debate-box">Critic: PROBLEM 1: Vague "node mention chips" requirement with missing implementation details
-The spec references using "the same chip component used in agent chat" but doesn't specify: What's the exact component name? What happens on click? How do @mentions get identified/parsed in markdown? Is there validation that the node exists? This creates ambiguity for implementation and testing.
+    <div class="debate-box">Critic: PROBLEM 1: No performance or security requirements specified
+The spec demands rendering arbitrary markdown with Mermaid diagrams and node mentions, but completely omits security considerations (XSS/injection attacks), performance constraints (file size limits, render timeouts), or sanitization requirements. This is a critical gap that will bite you in production—especially with user-generated mark
 
-PROBLEM 2: No me
-
-Defense: RESPONSE 1: **Concede.** The spec is dangerously vague. Referencing "the same chip component used in agent chat" without naming it (e.g., `&lt;NodeMentionChip /&gt;`) leaves implementation ambiguous. I should have explicitly specified: component API, click handler behavior (navigate to node? open modal?), parsing logic (@-prefix followed by valid node identifier), and whether non-existent node mentions </div>
+Defense: RESPONSE 1: **Concede.** This is a critical gap. The spec demands executing user-generated markdown and diagram code without any mention of XSS prevention, sanitization libraries (e.g., DOMPurify), file size limits, or render timeouts. Mermaid in particular can be DOS'd with pathological diagrams. A production system needs explicit constraints: max file size (e.g., 5MB), max render time (e.g., 5s </div>
   </div>
 
   <div class="section">
     <div class="section-title">📋 Technical Spec</div>
-    <div class="spec-text"># Technical Spec: Markdown File Rendering in View Mode
+    <div class="spec-text"># Technical Spec: Markdown Rendering in File View Mode
 
 ## SUMMARY
-Implement a fully-rendered markdown preview in file view mode with support for Mermaid diagrams, node mention chips, and standard markdown elements, while preserving raw text editing in edit mode.
+Implement a fully rendered markdown preview in file view mode with support for Mermaid diagrams, node mention chips, and standard markdown elements, while keeping edit mode as raw text.
 
 ## REQUIREMENTS
 
-- **Mermaid Diagram Rendering**: Parse markdown code blocks with `mermaid` language identifier and render as interactive diagrams instead of raw code
-- **Node Mention Chips**: Render `@node-name` mentions using the same chip component used in agent chat, with consistent styling and click behavior
-- **Standard Markdown Support**: Ensure proper rendering of:
-  - Tables with alignment
-  - Code blocks with syntax highlighting (using existing highlighting library)
-  - Images with alt text
-  - Links (internal and external)
-  - Lists (ordered, unordered, nested)
-  - Headers, bold, italic, strikethrough
-  - Blockquotes
-- **Conditional Rendering**: View mode displays rendered markdown; edit mode displays raw text
-- **No Breaking Changes**: Existing edit mode functionality remains unchanged
-- **Performance**: Render markdown without noticeable lag on files up to 100KB
+### Core Rendering
+- [ ] Render markdown files in view mode as formatted HTML (not raw text)
+- [ ] Keep edit mode displaying raw markdown source code unchanged
+- [ ] Toggle between view and edit modes without losing content
+
+### Mermaid Diagram Support
+- [ ] Detect mermaid code blocks (` ```mermaid ` syntax)
+- [ ] Render detected mermaid blocks as interactive diagrams, not raw code
+- [ ] Gracefully handle invalid mermaid syntax with error messaging
+- [ ] Support all standard mermaid diagram types (flowchart, sequence, gantt, etc.)
+
+### Node Mention Chips
+- [ ] Parse node mention syntax (e.g., `@node-name` or `[[node-name]]`) in markdown
+- [ ] Render mentions as interactive chips matching agent chat styling
+- [ ] Chips should be clickable to navigate to referenced nodes
+- [ ] Apply consistent styling with existing chip components
+
+### Standard Markdown Elements
+- [ ] Tables with proper formatting and alignment
+- [ ] Code blocks with syntax highlighting (non-mermaid)
+- [ ] Images with proper sizing and alt text
+- [ ] Headers, lists, bold, italic, links, blockquotes
+- [ ] Inline code formatting
+- [ ] Horizontal rules and line breaks
+
+### User Experience
+- [ ] View mode should be read-only (no inline editing)
+- [ ] Edit mode should have a "View" button/toggle to switch modes
+- [ ] Performance: render should complete in &lt;500ms for files &lt;50KB
+- [ ] Preserve scroll position when toggling between modes
 
 ## IMPLEMENTATION PLAN
 
-### Phase 1: Setup Markdown & Mermaid Libraries
-1. Install dependencies:
-   - `react-markdown` (for markdown parsing)
-   - `remark-gfm` (for GitHub Flavored Markdown tables, strikethrough, etc.)
-   - `mermaid` (for diagram rendering)
-   - `rehype-raw` (for raw HTML passthrough if needed)
-   - Ensure `react-syntax-highlighter` is available for code highlighting
-
-2. Create a `MarkdownRenderer` utility module to centralize markdown configuration
-
-### Phase 2: Create Mention Chip Component
-1. Extract or create a reusable `MentionChip` component that mirrors agent chat styling
-2. Accept props: `nodeName`, `onMentionClick`, `variant` (optional)
-3. Support click navigation or callback behavior
-
-### Phase 3: Implement Mermaid Rendering
-1. Create a `MermaidBlock` component:
-   - Detects `mermaid` code block language
-   </div>
+### Phase 1: Setup Markdown Rendering Engine
+1. Install markdown rendering library: `react-markdown` v9+ and `remark`/`rehype` plugins
+2. Install mermaid: `mermaid` v10+
+3. Create new component: `MarkdownViewer.tsx` to handle markdown → HTML rendering
+4. Create new component: `Mermaid</div>
   </div>
 
   <div class="section">
-    <div class="section-title">💻 Generated Code — MarkdownRenderer.jsx</div>
-    <pre>import React, { useEffect, useState, useCallback } from 'react';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
-import { useNavigate } from 'react-router-dom';
-import NodeMentionChip from '@/components/chips/NodeMentionChip';
-import MermaidDiagram from '@/components/diagrams/MermaidDiagram';
-import './MarkdownRenderer.css';
+    <div class="section-title">💻 Generated Code — markdown-renderer.js</div>
+    <pre>import DOMPurify from 'dompurify';
+import MarkdownIt from 'markdown-it';
+import mermaid from 'mermaid';
 
-const MarkdownRenderer = ({ content, nodeDatabase = {} }) =&gt; {
-  const [renderedHTML, setRenderedHTML] = useState('');
-  const [mentions, setMentions] = useState({});
-  const navigate = useNavigate();
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_RENDER_SIZE = 2 * 1024 * 1024; // 2MB for rendered content
 
-  // Regex to match @node-identifier mentions
-  const MENTION_REGEX = /(?:^|\s)@([a-zA-Z0-9_-]+)/g;
+class MarkdownRenderer {
+  constructor() {
+    this.md = new MarkdownIt({
+      html: false,
+      breaks: true,
+      linkify: true,
+    });
 
-  /**
-   * Extract and validate node mentions from markdown
-   */
-  const extractMentions = useCallback((text) =&gt; {
-    const foundMentions = {};
-    let match;
+    this.setupMermaidPlugin();
+    this.initMermaid();
+  }
 
-    while ((match = MENTION_REGEX.exec(text)) !== null) {
-      const nodeId = match[1];
-      foundMentions[nodeId] = {
-        exists: nodeId in nodeDatabase,
-        nodeId,
-      };
-    }
+  initMermaid() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'strict',
+    });
+  }
 
-    return foundMentions;
-  }, [nodeDatabase]);
+  setupMermaidPlugin() {
+    const defaultFence = this.md.renderer.rules.fence || this.defaultFence;
 
-  /**
-   * Custom renderer for marked to handle mermaid diagrams
-   */
-  const setupMarkedRenderer = () =&gt; {
-    const renderer = new marked.Renderer();
+    this.md.renderer.rules.fence = (tokens, idx, options, env, self) =&gt; {
+      const token = tokens[idx];
+      const info = token.info.trim();
 
-    // Override code block rendering for mermaid support
-    renderer.codespan = (code) =&gt; {
-      return `&lt;code&gt;${code.text}&lt;/code&gt;`;
-    };
-
-    renderer.code = (code) =&gt; {
-      const { text, lang } = code;
-
-      if (lang === 'mermaid') {
-        // Return placeholder for mermaid diagram
-        return `&lt;div class="mermaid-container" data-mermaid="${btoa(text)}"&gt;&lt;/div&gt;`;
+      if (info === 'mermaid') {
+        const code = token.content;
+        return this.renderMermaidBlock(code);
       }
 
-      // Standard code block with syntax highlighting
-      return `&lt;pre&gt;&lt;code class="language-${lang || 'plaintext'}"&gt;${DOMPurify.sanitize(text)}&lt;/code&gt;&lt;/pre&gt;`;
+      return defaultFence.call(this, tokens, idx, options, env, self);
     };
+  }
 
-    // Custom table rendering with alignment support
-    renderer.table = (table) =&gt; {
-      return `&lt;div class="markdown-table-wrapper"&gt;&lt;table&gt;${table.header}${table.body}&lt;/table&gt;&lt;/div&gt;`;
-    };
+  defaultFence(tokens, idx) {
+    const token = tokens[idx];
+    const info = token.info ? token.info.trim() : '';
+    const langName = info.split(/\s+/g)[0];
+    const highlighted =
+      langName && this.md.utils.escapeHtml(token.content);
 
-    renderer.tablerow = (row) =&gt; {
-      return `&lt;tr&gt;${row.text}&lt;/tr&gt;`;
-    };
-
-    renderer.tablecell = (cell) =&gt; {
-      const { text, flags } = cell;
-      const align = flags.align ? ` style="text-align:${flags.align}"` : '';
-      const tag = flags.header ? 'th' : 'td';
-      return `&lt;${tag}${align}&gt;${text}&lt;/${tag}&gt;`;
-    };
-
-    return renderer;
-  };
-
-  /**
-   * Replace mention placeholders with React components
-   */
-  const replaceMentionsWithComponents = (html) =&gt; {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // Find all text nodes and replace mentions
-    const walker = document.createTreeWalker(
-      doc.body,
-      NodeFilter.SHOW_TEXT,
-      null,
-      false
+    return (
+      `&lt;pre&gt;&lt;code${langName ? ` class="language-${langName}"` : ''}&gt;` +
+      (highlighted || this.md.utils.escapeHtml(token.content)) +
+      '&lt;/code&gt;&lt;/pre&gt;\n'
     );
+  }
 
-    const nodesToReplace = [];
-    let currentNode;
+  renderMermaidBlock(code) {
+    const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+    return `&lt;div class="mermaid" id="${id}"&gt;${this.md.utils.escapeHtml(code)}&lt;/div&gt;`;
+  }
 
-    while ((currentNode = walker.nextNode())) {
-      if (MENTION_REGEX.test(currentNode.nodeValue)) {
-        nodesToReplace.push(currentNode);
-      }
-    }
+  sanitizeHtml(html) {
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: [
+        'p',
+        'br',
+        'strong',
+        'em',
+        'u',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'ul',
+        'ol',
+        'li',
+        'blockquote',
+        'code',
+        'pre',
+        'a',
+        'img',
+        'table',
+        'thead',
+        'tbody',
+        'tr',
+        'th',
+        'td',
+        'hr',
+        'div',
+        'span',
+      ],
+      ALLOWED_ATTR: ['href', 'title', 'alt', 'src', 'class', 'id'],
+      ALLOW_DATA_ATTR: false,
+      ALLOW_UNKNOWN_PROTOCOLS: false,
+    });
+  }
 
-    nodesToReplace.forEach((node) =&gt; {
-      const span = document.createEleme</pre>
+  processNodeMentions(html) {
+    const nodeRegex = /@\[([^\]]+)\]\(node:([a-zA-Z0-9-]+)\)/g;
+
+    return html.replace(nodeRegex, (match, label, nodeId) =&gt; {
+      const escapedLabel = this.md.utils.escapeHtml(label);
+      const escapedId = this.md.utils.escapeHtml(nodeId);
+      return `&lt;span class="node-mention-chip" data-node-id="${escapedId}" role="button" tabindex="0"&gt;${escapedLabel}&lt;/span&gt;`;
+    });
+  }
+
+  validateFileSize(content) {
+    const byteSize = new Blob([content]).size;
+
+    if (byteSize &gt; MAX_FILE_SIZE) {
+      return {
+        valid: false,
+        warning: true,
+        message: `File exceeds 5MB limit (${(byteSize / 1024 / 1024).toFixed(2)}MB). Displaying raw text.`,
+      };
+   </pre>
   </div>
 
   <div class="section">
