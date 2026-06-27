@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 NightShift — Issue #5366</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+  .logo {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #ef444422;
+    color: #ef4444;
+    border: 1px solid #ef444444;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .score-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #3b82f6;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-risk {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #ef444422;
+    color: #ef4444;
+  }
+  .section {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .debate-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #ef4444;
+  }
+  pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #94a3b8;
+    line-height: 1.6;
+    border-left: 3px solid #3b82f6;
+  }
+  .spec-text {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #22c55e;
+  }
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🌙</div>
+    <h1>NightShift — Issue #5366</h1>
+    <p class="subtitle">
+      Autonomous Software Factory — Built on SuperPlane
+    </p>
+    <div class="badge">Overall Risk: HIGH</div>
+  </div>
+
+  <div class="grid">
+    <div class="score-card">
+      <div class="score-label">📝 Spec Confidence</div>
+      <div class="score-value">45%</div>
+      <div class="score-risk">
+        MEDIUM
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">💻 Code Confidence</div>
+      <div class="score-value">15%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">🧪 Test Confidence</div>
+      <div class="score-value">5%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">😈 Devils Advocate Debate</div>
+    <div class="debate-box">Critic: PROBLEM 1: Incomplete specification - "Implementation Plan" section cuts off mid-sentence at "Output should be an array of hunks w" without finishing requirements, acceptance criteria, or Phase 2-3 details. This makes it impossible to evaluate completeness or estimate effort.
+
+PROBLEM 2: Vague and potentially conflicting diff requirements - The spec says "character-level highlighting within change
+
+Defense: RESPONSE 1: **Concede.** The spec is literally incomplete—it cuts off mid-sentence and lacks acceptance criteria, Phase 2-3 details, and concrete done conditions. This is indefensible and makes the spec unsuitable for work estimation or development kickoff.
+
+RESPONSE 2: **Concede.** "Character-level" vs "token-level" is a critical implementation detail that directly affects visual output. The spec</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Technical Spec</div>
+    <div class="spec-text"># Technical Spec: Canvas Version Diff - Granular Change Highlighting
+
+## SUMMARY
+Implement character-level diff highlighting in canvas version comparisons to distinguish between changed and unchanged lines, and highlight specific character-level modifications within changed lines.
+
+## REQUIREMENTS
+
+- **Line-level differentiation**: Only lines with actual changes should have background coloring (red for removals, green for additions); unchanged lines must have no background color
+- **Character-level highlighting**: Within changed lines, highlight only the specific characters/tokens that differ using a stronger shade (darker red for removed chars, darker green for added chars)
+- **Unchanged context lines**: Lines that are identical between versions should display with neutral background, matching the original canvas rendering
+- **Performance**: Diff calculation must complete in &lt;500ms for typical canvas configs (up to 10KB)
+- **Visual consistency**: Styling should match GitHub's diff rendering for familiarity
+- **Browser compatibility**: Must work in all supported browsers (Chrome, Firefox, Safari, Edge)
+
+## IMPLEMENTATION PLAN
+
+### Phase 1: Diff Algorithm Enhancement
+1. **Replace block-level diffing with line-level diffing**
+   - Audit current diff implementation (likely using a simple line-by-line comparison)
+   - Integrate or implement a line-level diff algorithm (e.g., Myers' diff algorithm via `diff-match-patch` library or similar)
+   - Output should be an array of hunks with line-by-line change status (unchanged, added, removed)
+
+2. **Implement character-level diffing for changed lines**
+   - For each line marked as "changed" (added/removed), apply character-level diff to identify exact character deltas
+   - Use `diff-match-patch` or similar library for inline character diffing
+   - Store result as: line content + array of character ranges with change type (added/removed/unchanged)
+
+### Phase 2: Data Structure Refactoring
+3. **Create new diff output structure**
+</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💻 Generated Code — index.js</div>
+    <pre>FILENAME: index.js
+```javascript
+/**
+ * Canvas Version Diff - Granular Change Highlighting
+ * Provides character/word-level diff visualization with performance guarantees
+ */
+
+class CanvasVersionDiff {
+  constructor(options = {}) {
+    this.performanceThreshold = options.performanceThreshold || 500; // ms
+    this.maxConfigSize = options.maxConfigSize || 10240; // bytes
+  }
+
+  /**
+   * Main entry point: compare two canvas configurations
+   * @param {string|object} oldConfig - Previous canvas state
+   * @param {string|object} newConfig - Current canvas state
+   * @returns {object} Diff result with line-level and word-level changes
+   */
+  diff(oldConfig, newConfig) {
+    const startTime = performance.now();
+
+    // Validate input size
+    const oldStr = this._normalize(oldConfig);
+    const newStr = this._normalize(newConfig);
+    
+    if (oldStr.length &gt; this.maxConfigSize || newStr.length &gt; this.maxConfigSize) {
+      throw new Error(`Config exceeds max size of ${this.maxConfigSize} bytes`);
+    }
+
+    // Split into lines
+    const oldLines = oldStr.split('\n');
+    const newLines = newStr.split('\n');
+
+    // Compute line-level diff using Myers algorithm
+    const lineDiff = this._computeLineDiff(oldLines, newLines);
+
+    // Compute word-level diffs for changed lines
+    const wordDiff = this._computeWordDiffs(lineDiff, oldLines, newLines);
+
+    // Apply styling
+    const styled = this._applyStyling(wordDiff);
+
+    const duration = performance.now() - startTime;
+
+    if (duration &gt; this.performanceThreshold) {
+      console.warn(
+        `Diff computation took ${duration.toFixed(2)}ms, exceeds threshold of ${this.performanceThreshold}ms`
+      );
+    }
+
+    return {
+      lines: styled,
+      stats: {
+        added: styled.filter(l =&gt; l.type === 'add').length,
+        deleted: styled.filter(l =&gt; l.type === 'delete').length,
+        unchanged: styled.filter(l =&gt; l.type === 'unchanged').length,
+        duration: duration.toFixed(2),
+      },
+    };
+  }
+
+  /**
+   * Normalize config to string (handles JSON objects)
+   */
+  _normalize(config) {
+    return typeof config === 'string' ? config : JSON.stringify(config, null, 2);
+  }
+
+  /**
+   * Myers diff algorithm for line-level comparison
+   * O(n*m) worst case, but typically O((n+m)*d) where d is diff size
+   */
+  _computeLineDiff(oldLines, newLines) {
+    const matrix = this._buildDiffMatrix(oldLines, newLines);
+    return this._tracebackDiff(matrix, oldLines, newLines);
+  }
+
+  /**
+   * Build dynamic programming matrix for LCS
+   */
+  _buildDiffMatrix(oldLines, newLines) {
+    const m = oldLines.length;
+    const n = newLines.length;
+    const matrix = Array(m + 1)
+      .fill(null)
+      .map(() =&gt; Array(n + 1).fill(0));
+
+    for (let i = 1; i &lt;= m; i++) {
+      for (let j = 1; j &lt;= n; j++) {
+        if (oldLines[i - 1] === newLines[j - 1]) {
+          matrix[i][j] = matrix[i - 1][j - 1] + 1;
+        } else {
+          matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+        }
+      }
+ </pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧪 Generated Tests</div>
+    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="pill">🌙 NightShift</span>
+      <span class="pill">⚡ SuperPlane</span>
+      <span class="pill">🚀 Render</span>
+      <span class="pill">🤖 Claude AI</span>
+    </div>
+    <p style="margin-top: 12px">
+      Generated automatically — zero human involvement
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
