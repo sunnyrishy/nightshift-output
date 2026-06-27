@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 NightShift — Issue #5705</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+  .logo {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #ef444422;
+    color: #ef4444;
+    border: 1px solid #ef444444;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .score-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #3b82f6;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-risk {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #ef444422;
+    color: #ef4444;
+  }
+  .section {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .debate-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #ef4444;
+  }
+  pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #94a3b8;
+    line-height: 1.6;
+    border-left: 3px solid #3b82f6;
+  }
+  .spec-text {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #22c55e;
+  }
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🌙</div>
+    <h1>NightShift — Issue #5705</h1>
+    <p class="subtitle">
+      Autonomous Software Factory — Built on SuperPlane
+    </p>
+    <div class="badge">Overall Risk: HIGH</div>
+  </div>
+
+  <div class="grid">
+    <div class="score-card">
+      <div class="score-label">📝 Spec Confidence</div>
+      <div class="score-value">35%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">💻 Code Confidence</div>
+      <div class="score-value">15%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">🧪 Test Confidence</div>
+      <div class="score-value">5%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">😈 Devils Advocate Debate</div>
+    <div class="debate-box">Critic: PROBLEM 1: Vague success criteria and missing acceptance tests
+The spec lacks concrete, measurable acceptance criteria. What does "comprehensive coverage" actually mean? How many of the 8 warning types must be implemented? What's the performance threshold for detecting these warnings? The incomplete line "Audit can" suggests rushed work. Without clear definitions of done, this will be disputed dur
+
+Defense: RESPONSE 1: **CONCEDE**
+The critic is right—"comprehensive coverage" is meaningless without specifics. The incomplete sentence "Audit can" is indefensible sloppiness. I need explicit acceptance criteria: "All 8 warning types implemented and tested" and "Warning detection completes in &lt;100ms on canvases with &lt;500 nodes" are measurable. Without this, the spec invites scope creep and review disputes.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Technical Spec</div>
+    <div class="spec-text"># Technical Spec: Improve Canvas Warnings
+
+## SUMMARY
+Redesign the canvas warning system to provide richer visual feedback with improved UI components, comprehensive coverage of misconfiguration scenarios, and more prominent placement in the application interface.
+
+---
+
+## REQUIREMENTS
+
+### 1. Warning UI Design
+- [ ] Replace plain console links with rich node mention chips (matching agent chat chip styling)
+- [ ] Implement structured warning format with:
+  - Clear warning icon/badge
+  - Descriptive title (e.g., "Action node has no inputs")
+  - Detailed explanation text
+  - Node reference(s) as interactive chips
+  - Suggested remediation steps (when applicable)
+- [ ] Support warning severity levels: `error`, `warning`, `info`
+- [ ] Ensure warnings are easily copyable/shareable for debugging
+
+### 2. Missing Warnings Coverage
+- [ ] **Action node with no inputs**: Detect action nodes with zero incoming edges
+- [ ] **Orphaned nodes**: Detect nodes that are never referenced as inputs by any downstream node
+- [ ] **Unreachable nodes**: Detect nodes that cannot be reached from any entry point (trigger/start node)
+- [ ] **Missing required inputs**: Detect when a node's required configuration fields are empty
+- [ ] **Circular dependencies**: Detect circular references in node connections
+- [ ] **Dangling output references**: Detect when a node references outputs from non-existent nodes
+- [ ] **Unused outputs**: Detect when a node produces outputs that are never consumed
+- [ ] Audit canvas validation logic and create validation rule registry
+
+### 3. Placement and Rendering
+- [ ] Create dedicated warning panel in canvas sidebar (collapsible, persistent)
+- [ ] Display badge count on warning panel toggle button
+- [ ] Add inline warning indicators on problematic nodes (small warning icon on node card)
+- [ ] Implement click-through from warning panel to highlight/focus node on canvas
+- [ ] Add option to auto-expand warning panel when warnings are detected
+- [ ] Support filtering/so</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💻 Generated Code — index.js</div>
+    <pre># Canvas Warning System Implementation
+
+FILENAME: index.js
+```javascript
+import { EventEmitter } from 'events';
+
+/**
+ * Canvas Warning System
+ * Detects misconfiguration scenarios and provides rich visual feedback
+ */
+class CanvasWarningSystem extends EventEmitter {
+  constructor(options = {}) {
+    super();
+    this.warnings = new Map();
+    this.suppressedWarnings = new Set();
+    this.detectionLatency = 0;
+    this.storagePrefix = 'canvas-warning-';
+    this.loadSuppressedWarnings();
+  }
+
+  /**
+   * Main detection pipeline - runs on canvas save
+   * Target: &lt;100ms latency
+   */
+  async detectWarnings(canvas) {
+    const startTime = performance.now();
+    this.warnings.clear();
+
+    try {
+      // Run all detection algorithms in parallel
+      await Promise.all([
+        this.detectActionNodesWithoutInputs(canvas),
+        this.detectOrphanedNodes(canvas),
+        this.detectMissingNodeConfigurations(canvas),
+        this.detectCircularDependencies(canvas),
+        this.detectUnconnectedOutputs(canvas),
+        this.detectMissingVariableReferences(canvas),
+        this.detectInvalidNodeTypes(canvas),
+        this.detectResourceExhaustion(canvas),
+      ]);
+
+      this.detectionLatency = performance.now() - startTime;
+      this.emit('warnings-detected', this.getActiveWarnings());
+      return this.getActiveWarnings();
+    } catch (error) {
+      this.emit('detection-error', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Detection Algorithm 1: Action node with no inputs
+   */
+  async detectActionNodesWithoutInputs(canvas) {
+    canvas.nodes.forEach((node) =&gt; {
+      if (node.type === 'action' && !this.hasInputConnections(node, canvas)) {
+        this.addWarning({
+          nodeId: node.id,
+          type: 'action-no-inputs',
+          severity: 'warning',
+          title: 'Action node has no inputs',
+          explanation:
+            'This action will execute with no data. Connect input nodes or configure static inputs.',
+          affectedNodes: [node.id],
+          remediationSteps: [
+            'Connect an input node to this action',
+            'Or configure static input values in the node settings',
+            'Or use this action as a trigger with event-based inputs',
+          ],
+        });
+      }
+    });
+  }
+
+  /**
+   * Detection Algorithm 2: Orphaned nodes (unreferenced)
+   */
+  async detectOrphanedNodes(canvas) {
+    const referencedNodeIds = new Set();
+
+    canvas.nodes.forEach((node) =&gt; {
+      if (node.edges) {
+        node.edges.forEach((edge) =&gt; {
+          referencedNodeIds.add(edge.target);
+        });
+      }
+    });
+
+    canvas.nodes.forEach((node) =&gt; {
+      const isStartNode = node.type === 'start' || node.isEntryPoint;
+      const isReferenced = referencedNodeIds.has(node.id);
+      const hasOutgoing = node.edges && node.edges.length &gt; 0;
+
+      if (!isStartNode && !isReferenced && !hasOutgoing) {
+        this.addWarning({
+          nodeId: node.id,
+          type: 'orphaned-node',
+          severity: 'info',
+        </pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧪 Generated Tests</div>
+    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="pill">🌙 NightShift</span>
+      <span class="pill">⚡ SuperPlane</span>
+      <span class="pill">🚀 Render</span>
+      <span class="pill">🤖 Claude AI</span>
+    </div>
+    <p style="margin-top: 12px">
+      Generated automatically — zero human involvement
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
