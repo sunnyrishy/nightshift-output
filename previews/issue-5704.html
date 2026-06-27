@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 NightShift — Issue #5704</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+  .logo {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #ef444422;
+    color: #ef4444;
+    border: 1px solid #ef444444;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .score-label {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #3b82f6;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-risk {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #ef444422;
+    color: #ef4444;
+  }
+  .section {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .debate-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #ef4444;
+  }
+  pre {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #94a3b8;
+    line-height: 1.6;
+    border-left: 3px solid #3b82f6;
+  }
+  .spec-text {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    border-left: 3px solid #22c55e;
+  }
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🌙</div>
+    <h1>NightShift — Issue #5704</h1>
+    <p class="subtitle">
+      Autonomous Software Factory — Built on SuperPlane
+    </p>
+    <div class="badge">Overall Risk: HIGH</div>
+  </div>
+
+  <div class="grid">
+    <div class="score-card">
+      <div class="score-label">📝 Spec Confidence</div>
+      <div class="score-value">45%</div>
+      <div class="score-risk">
+        MEDIUM
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">💻 Code Confidence</div>
+      <div class="score-value">15%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-label">🧪 Test Confidence</div>
+      <div class="score-value">5%</div>
+      <div class="score-risk">
+        HIGH
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">😈 Devils Advocate Debate</div>
+    <div class="debate-box">Critic: PROBLEM 1: Incomplete requirement - "Navigation Without Sidebar" section cuts off mid-sentence ("Clicking navigates bac") making it impossible to know what the actual success criteria are or where users should navigate to.
+
+PROBLEM 2: No acceptance criteria or success metrics defined - the spec describes *what* to build but never states how to verify it's working. For example: what constitutes "pr
+
+Defense: RESPONSE 1: Concede. The incomplete sentence "Add 'Fullscreen modal': Add "..." is obviously a copy-paste error that makes the requirement unactionable. This was sloppy and should never have been submitted.
+
+RESPONSE 2: Concede. The spec conflates description with acceptance criteria. "Display duration prominently" is vague—prominent to whom, where, in what context? Without measurable criteria (e.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Technical Spec</div>
+    <div class="spec-text"># Technical Spec: Run Inspection UX Improvements
+
+## SUMMARY
+Restore and enhance the run inspection user experience by adding duration displays, improving payload inspection UX, fixing navigation issues, and restoring run search functionality.
+
+## REQUIREMENTS
+
+### 1. Run Duration Display
+- Display total run duration prominently in the run details header
+- Calculate duration as `end_time - start_time` from run metadata
+- Format duration as human-readable string (e.g., "2m 34s", "1h 15m")
+- Handle edge cases: runs still executing, runs with missing timestamps
+
+### 2. Node Execution Duration
+- Display duration for each individual node execution in the node details panel
+- Calculate node duration from node execution start/end timestamps
+- Format consistently with run duration
+- Show duration in the node header or metadata section
+
+### 3. Payload Inspection Improvements
+- **Auto-expand behavior**: Expand first 2 levels of JSON by default (instead of collapsed)
+- **Fullscreen modal**: Add "Expand" button to open payload in fullscreen modal dialog
+- **Modal features**:
+  - Display full JSON with syntax highlighting
+  - Searchable/filterable content within modal
+  - Copy-to-clipboard functionality
+  - Close button and keyboard escape support
+- Maintain current inline payload viewer for quick glances
+
+### 4. Navigation Without Sidebar
+- Add persistent "Live Canvas" button/link in the run inspector header
+- Button remains visible even when sidebar is collapsed
+- Clicking navigates back to live canvas view without requiring sidebar expansion
+- Alternative: Add keyboard shortcut (e.g., `Esc` or `Ctrl+L`)
+
+### 5. Run Search/Filter
+- Restore search input in runs sidebar
+- Filter runs by title (root title) in real-time as user types
+- Case-insensitive matching
+- Clear/reset search functionality
+- Show filtered count (e.g., "3 of 12 runs")
+
+## IMPLEMENTATION PLAN
+
+### Phase 1: Duration Displays (Files: run-details, node-details)
+1. Update run details header component:
+   - Extract</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💻 Generated Code — index.js</div>
+    <pre>FILENAME: index.js
+```javascript
+// Run Inspection UX Improvements
+
+import React, { useState, useEffect } from 'react';
+import { ChevronUp, Maximize2, X } from 'lucide-react';
+
+/**
+ * Formats duration between two timestamps
+ * @param {number|string} startTime - Start timestamp (ms)
+ * @param {number|string} endTime - End timestamp (ms)
+ * @param {boolean} isRunning - Whether run is currently executing
+ * @returns {string} Human-readable duration
+ */
+export const formatDuration = (startTime, endTime, isRunning = false) =&gt; {
+  if (!startTime) return 'Duration unavailable';
+  if (!isRunning && !endTime) return 'Duration unavailable';
+
+  const start = new Date(startTime).getTime();
+  const end = isRunning ? Date.now() : new Date(endTime).getTime();
+
+  if (isNaN(start) || isNaN(end)) return 'Invalid timestamps';
+  if (end &lt; start) return 'Invalid timestamps';
+
+  const totalSeconds = Math.floor((end - start) / 1000);
+  return formatSeconds(totalSeconds, isRunning);
+};
+
+/**
+ * Converts seconds to human-readable format
+ * @param {number} seconds - Total seconds
+ * @param {boolean} isRunning - Whether currently running
+ * @returns {string} Formatted duration
+ */
+const formatSeconds = (seconds, isRunning = false) =&gt; {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  const parts = [];
+  if (hours &gt; 0) parts.push(`${hours}h`);
+  if (minutes &gt; 0) parts.push(`${minutes}m`);
+  if (secs &gt; 0 || parts.length === 0) parts.push(`${secs}s`);
+
+  const duration = parts.join(' ');
+  return isRunning ? `${duration} (in progress)` : duration;
+};
+
+/**
+ * Run Duration Display Component
+ */
+export const RunDurationDisplay = ({ startTime, endTime, isRunning = false }) =&gt; {
+  const [displayDuration, setDisplayDuration] = useState(
+    formatDuration(startTime, endTime, isRunning)
+  );
+
+  useEffect(() =&gt; {
+    if (!isRunning) {
+      setDisplayDuration(formatDuration(startTime, endTime, false));
+      return;
+    }
+
+    const interval = setInterval(() =&gt; {
+      setDisplayDuration(formatDuration(startTime, endTime, true));
+    }, 1000);
+
+    return () =&gt; clearInterval(interval);
+  }, [startTime, endTime, isRunning]);
+
+  return (
+    &lt;div className="text-sm text-gray-600 mt-1"&gt;
+      &lt;div className="flex items-center gap-2"&gt;
+        {isRunning && &lt;div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" /&gt;}
+        &lt;span&gt;{displayDuration}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+/**
+ * Node Execution Duration Component
+ */
+export const NodeExecutionDuration = ({ nodeStartTime, nodeEndTime, nodeIsRunning = false }) =&gt; {
+  const [displayDuration, setDisplayDuration] = useState(
+    formatDuration(nodeStartTime, nodeEndTime, nodeIsRunning)
+  );
+
+  useEffect(() =&gt; {
+    if (!nodeIsRunning) {
+      setDisplayDuration(formatDuration(nodeStartTime, nodeEndTime, false));
+      return;
+    }
+
+    const interval = setInterval(() =&gt; {
+      setDisplayDuration(formatDuration(nodeStartTime, nodeEndTime, true</pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧪 Generated Tests</div>
+    <pre>test('renders', () =&gt; { expect(true).toBe(true); });</pre>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="pill">🌙 NightShift</span>
+      <span class="pill">⚡ SuperPlane</span>
+      <span class="pill">🚀 Render</span>
+      <span class="pill">🤖 Claude AI</span>
+    </div>
+    <p style="margin-top: 12px">
+      Generated automatically — zero human involvement
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
